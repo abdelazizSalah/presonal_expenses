@@ -12,17 +12,19 @@ class UserTransactions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 350.5,
       child: ListView.builder(
         itemBuilder: (context, index) {
           return Card(
               child: Column(children: [
             Container(
-                color: Colors.amber[700],
-                height: 50,
+                // color: Colors.amber[700],
+                color: Colors.blue[900],
+                height: 55.4,
                 margin: EdgeInsets.all(3),
                 child: Card(
-                  color: Colors.amber[700],
+                  color: Colors.blue[600],
+                  // color: Colors.amber[700],
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -35,25 +37,28 @@ class UserTransactions extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              txs[index].title,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                            Text(
-                              DateFormat.yMMMd().format(txs[index].date),
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            )
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                txs[index].title,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              Text(
+                                DateFormat.yMMMd().format(txs[index].date),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              )
+                            ],
+                          ),
                         )
                       ]),
                 ))

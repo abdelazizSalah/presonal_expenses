@@ -26,6 +26,14 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: null,
+            icon: Icon(
+              Icons.add,
+            ),
+          )
+        ],
         centerTitle: true,
         title: Text(
           "Personal Expanses",
@@ -43,13 +51,19 @@ class MainPage extends StatelessWidget {
         height: double.infinity,
         width: double.infinity,
         color: Colors.blueGrey,
-        child: Column(children: [
-          /// the chart card
-          Charts(),
+        // in order to avoid the overflow make the main page as listview
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            return Column(children: [
+              /// the chart card
+              Charts(),
 
-          /// responsive widget for transactions
-          TransactionView()
-        ]),
+              /// responsive widget for transactions
+              TransactionView()
+            ]);
+          },
+          itemCount: 1,
+        ),
       ),
     );
   }

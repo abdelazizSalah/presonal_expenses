@@ -23,7 +23,7 @@ class _TransactionViewState extends State<TransactionView> {
   String currancyInput = "";
   double priceInput = 0.0;
   DateTime dateInput = DateTime.now();
-
+  TextEditingController priceController = TextEditingController();
   void setTitle(String inp) {
     titleInput = inp;
     print(titleInput);
@@ -46,25 +46,36 @@ class _TransactionViewState extends State<TransactionView> {
 
   void addElement() {
     // input validations
-    if (titleInput == "no item" || currancyInput == "" || priceInput <= 0.0) {
+    if (titleInput == "no item" ||
+        currancyInput == "" ||
+        double.parse(priceController.text) <= 0.0) {
+      print(priceController.text);
       return;
     }
 
-    Transaction tx =
-        Transaction(titleInput, currancyInput, priceInput, dateInput);
+    Transaction tx = Transaction(titleInput, currancyInput,
+        double.parse(priceController.text), dateInput);
     setState(() {
       txs.add(tx);
+    });
+  }
+
+  void clearListElement() {
+    setState(() {
+      txs.clear();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 620,
+        height: 625,
         child: Column(
           children: [
             /// inputs card
             Inputs(
+                clearElements: clearListElement,
+                priceController: priceController,
                 setCurrnacy: setCurrnacy,
                 addElement: addElement,
                 setDate: setDate,
