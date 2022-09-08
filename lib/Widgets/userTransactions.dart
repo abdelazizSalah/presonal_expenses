@@ -33,6 +33,7 @@ class UserTransactions extends StatelessWidget {
                               ' ' +
                               txs[index].price.toStringAsFixed(2),
                           style: TextStyle(
+                              fontFamily: 'OpenSans',
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
@@ -45,13 +46,15 @@ class UserTransactions extends StatelessWidget {
                               Text(
                                 txs[index].title,
                                 style: TextStyle(
-                                    fontSize: 22,
+                                    fontFamily: 'OpenSans',
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
                               Text(
                                 DateFormat.yMMMd().format(txs[index].date),
                                 style: TextStyle(
+                                    fontFamily: 'OpenSans',
                                     fontSize: 16,
                                     decoration: TextDecoration.underline,
                                     fontWeight: FontWeight.bold,

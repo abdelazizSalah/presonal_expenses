@@ -15,7 +15,7 @@ class MainPage extends StatelessWidget {
       theme: ThemeData(
           primaryColorDark: Color.fromARGB(255, 72, 122, 148),
           splashColor: Colors.blueGrey,
-          fontFamily: 'DancingScript'),
+          fontFamily: ' '),
       home: PersonalExpanses(),
       debugShowCheckedModeBanner: false,
     );
@@ -135,6 +135,7 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
 
   @override
   Widget build(BuildContext context) {
+    // print(_recentTransactions);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -194,20 +195,22 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
               ),
             )
           : Container(
-              height: double.infinity,
-              width: double.infinity,
+              height: 700,
+              width: 400,
               // color: Colors.blueGrey,
               color: Theme.of(context).splashColor,
               // in order to avoid the overflow make the main page as listview
               child: ListView.builder(
                 itemBuilder: (context, index) {
-                  return Column(children: [
-                    /// the chart card
-                    Charts(_recentTransactions),
+                  return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        /// the chart card
+                        Charts(_recentTransactions),
 
-                    ///the transactions card
-                    UserTransactions(txs: txs)
-                  ]);
+                        ///the transactions card
+                        UserTransactions(txs: txs)
+                      ]);
                 },
                 itemCount: 1,
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import './/Models/Transaction.dart';
+import 'BarChart.dart';
 
 class Charts extends StatelessWidget {
   final List<Transaction> txs;
@@ -29,12 +30,37 @@ class Charts extends StatelessWidget {
     });
   }
 
+  double get getTotalAmount {
+    double total = 0.0;
+    for (Map<String, Object> tx in groupedTransactions) {
+      total += tx['amount'] as double;
+    }
+
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(groupedTransactions);
-    return Card(
-        child: Row(
-      children: [],
-    ));
+    return Container(
+      height: 140,
+      width: 400,
+      child: Flexible(
+        child: Card(
+            color: Colors.white70,
+            elevation: 20,
+            // color: Colors.amber,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: groupedTransactions.map((data) {
+                return BarChart(
+                    label: data["day"] as String,
+                    price: data['amount'] as double,
+                    percentageOfTotalSpending: groupedTransactions.isEmpty
+                        ? 0.0
+                        : (data['amount'] as double) / getTotalAmount);
+              }).toList(),
+            )),
+      ),
+    );
   }
 }
