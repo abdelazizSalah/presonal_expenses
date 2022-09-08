@@ -20,7 +20,7 @@ class UserTransactions extends StatelessWidget {
             Container(
                 // color: Colors.amber[700],
                 color: Colors.blue[900],
-                height: 55.4,
+                height: 65,
                 margin: EdgeInsets.all(3),
                 child: Card(
                   color: Colors.blue[600],
@@ -40,12 +40,12 @@ class UserTransactions extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(
                                 txs[index].title,
                                 style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 22,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),

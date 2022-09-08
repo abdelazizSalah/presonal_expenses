@@ -98,7 +98,7 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
   //   });
   // }
 
-  void showEntryWidget(BuildContext ctx) {
+  void _showEntryWidget(BuildContext ctx) {
     showModalBottomSheet(
         context: ctx,
 
@@ -119,13 +119,27 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
         }));
   }
 
+  /// i want to make a function that returns a list of only the transactions
+  /// happend in the last week only
+  List<Transaction> get _recentTransactions {
+    var newTxs = txs.where((tx) {
+      /// bgeb el w2t delw2ty w atr7 meno duration bl days w el duration
+      /// de hya 7 ayam 34an a8ty el esbo3 kolo
+      return tx.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+    // txs = newTxs;
+
+    /// to always remove the old transactions
+    return newTxs;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          showEntryWidget(context);
+          _showEntryWidget(context);
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -143,11 +157,12 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
         title: Text(
           "Personal Expanses",
           style: TextStyle(
+            fontFamily: 'Quicksand',
             shadows: [
               Shadow(
-                  blurRadius: 30, color: Colors.white, offset: Offset(10, 10))
+                  blurRadius: 60, color: Colors.white, offset: Offset(10, 10))
             ],
-            fontSize: 30,
+            fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -161,9 +176,11 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
                   Text(
                     "No transactions yet :(",
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22.5,
-                        shadows: [Shadow(blurRadius: 15, color: Colors.black)]),
+                        color: Colors.black,
+                        fontSize: 28,
+                        shadows: [
+                          Shadow(blurRadius: 100, color: Colors.white)
+                        ]),
                   ),
                   Container(
                     height: 600,
@@ -186,11 +203,7 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
                 itemBuilder: (context, index) {
                   return Column(children: [
                     /// the chart card
-                    Charts(),
-
-                    /// responsive widget for transactions
-                    /// inputs card
-                    // height: 625,
+                    Charts(_recentTransactions),
 
                     ///the transactions card
                     UserTransactions(txs: txs)
