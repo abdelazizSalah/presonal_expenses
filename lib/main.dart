@@ -30,18 +30,18 @@ class PersonalExpanses extends StatefulWidget {
 class _PersonalExpansesState extends State<PersonalExpanses> {
   List<Transaction> txs = [
     Transaction("PlayStation5", "\$", 200, DateTime.now()),
-    // Transaction("Laptop Acer", "EGP ", 39043.99, DateTime.now()),
-    // Transaction("Rolex Watch", "Euro ", 4500, DateTime.now()),
-    // Transaction("I Pad", "\$", 421.43, DateTime.now()),
-    // Transaction("Laptop Acer", "EGP ", 39043.99, DateTime.now()),
-    // Transaction("Rolex Watch", "Euro ", 4500, DateTime.now()),
-    // Transaction("I Pad", "\$", 421.43, DateTime.now()),
-    // Transaction("Laptop Acer", "EGP ", 39043.99, DateTime.now()),
-    // Transaction("Rolex Watch", "Euro ", 4500, DateTime.now()),
-    // Transaction("I Pad", "\$", 421.43, DateTime.now()),
-    // Transaction("Laptop Acer", "EGP ", 39043.99, DateTime.now()),
-    // Transaction("Rolex Watch", "Euro ", 4500, DateTime.now()),
-    // Transaction("I Pad", "\$", 421.43, DateTime.now()),
+    Transaction("Laptop Acer", "EGP ", 39043.99, DateTime.now()),
+    Transaction("Rolex Watch", "Euro ", 4500, DateTime.now()),
+    Transaction("I Pad", "\$", 421.43, DateTime.now()),
+    Transaction("Laptop Acer", "EGP ", 39043.99, DateTime.now()),
+    Transaction("Rolex Watch", "Euro ", 4500, DateTime.now()),
+    Transaction("I Pad", "\$", 421.43, DateTime.now()),
+    Transaction("Laptop Acer", "EGP ", 39043.99, DateTime.now()),
+    Transaction("Rolex Watch", "Euro ", 4500, DateTime.now()),
+    Transaction("I Pad", "\$", 421.43, DateTime.now()),
+    Transaction("Laptop Acer", "EGP ", 39043.99, DateTime.now()),
+    Transaction("Rolex Watch", "Euro ", 4500, DateTime.now()),
+    Transaction("I Pad", "\$", 421.43, DateTime.now()),
   ];
 
   String titleInput = "no item";
