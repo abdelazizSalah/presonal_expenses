@@ -30,60 +30,41 @@ class PersonalExpanses extends StatefulWidget {
 class _PersonalExpansesState extends State<PersonalExpanses> {
   List<Transaction> txs = [
     Transaction("PlayStation5", "\$", 200, DateTime.now()),
-    Transaction("Laptop Acer", "EGP ", 39043.99, DateTime.now()),
-    Transaction("Rolex Watch", "Euro ", 4500, DateTime.now()),
     Transaction("I Pad", "\$", 421.43, DateTime.now()),
-    Transaction("Laptop Acer", "EGP ", 39043.99, DateTime.now()),
-    Transaction("Rolex Watch", "Euro ", 4500, DateTime.now()),
-    Transaction("I Pad", "\$", 421.43, DateTime.now()),
-    Transaction("Laptop Acer", "EGP ", 39043.99, DateTime.now()),
-    Transaction("Rolex Watch", "Euro ", 4500, DateTime.now()),
-    Transaction("I Pad", "\$", 421.43, DateTime.now()),
-    Transaction("Laptop Acer", "EGP ", 39043.99, DateTime.now()),
-    Transaction("Rolex Watch", "Euro ", 4500, DateTime.now()),
-    Transaction("I Pad", "\$", 421.43, DateTime.now()),
+    Transaction("Rolex", "\$", 421.43, DateTime.now()),
+    Transaction("I Phone", "\$", 421.43, DateTime.now()),
+    Transaction("Ice watch", "\$", 421.43, DateTime.now()),
   ];
 
-  String titleInput = "no item";
+  String titleInput = "";
   String currancyInput = "";
   double priceInput = 0.0;
-  DateTime dateInput = DateTime.now();
+  DateTime dateInput = DateTime(2022);
   TextEditingController priceController = TextEditingController();
-  TextEditingController currancyController = TextEditingController();
   TextEditingController titleController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-
-  void setTitle(String inp) {
-    titleInput = inp;
-  }
-
-  void setCurrnacy(String inp) {
-    currancyInput = inp;
-  }
-
-  void setPrice(String inp) {
-    priceInput = double.parse(inp);
-  }
-
-  void setDate(String inp) {
-    dateInput = DateTime.now();
-  }
 
   void addElement() {
     // input validations
-    if (titleInput == "no item" ||
-        currancyInput == "" ||
-        double.parse(priceController.text) <= 0.0) {
+    if (titleController.text == "" ||
+        priceController.text == "" ||
+        double.parse(priceController.text) <= 0.0 ||
+        dateInput == DateTime(2022)) {
       return;
     }
 
-    Transaction tx = Transaction(titleInput, currancyInput,
+    Transaction tx = Transaction(titleController.text, "\$",
         double.parse(priceController.text), dateInput);
     setState(() {
       txs.add(tx);
     });
-
+    clearInputs();
     Navigator.of(context).pop();
+  }
+
+  void deleteTransaction(Transaction tx) {
+    setState(() {
+      txs.remove(tx);
+    });
   }
 
   void clearListElement() {
@@ -92,11 +73,29 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
     });
   }
 
-  // void clearTransactions() {
-  //   setState(() {
-  //     txs.clear();
-  //   });
-  // }
+  void clearInputs() {
+    Navigator.of(context).pop();
+    setState(() {
+      titleController.text = "";
+      priceController.text = "";
+      dateInput = DateTime(2022);
+    });
+    _showEntryWidget(context);
+  }
+
+  void pickDate() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2022),
+            lastDate: DateTime.now())
+        .then((date) {
+      if (date == null) return;
+      Navigator.of(context).pop();
+      _showEntryWidget(context);
+      dateInput = date;
+    });
+  }
 
   void _showEntryWidget(BuildContext ctx) {
     showModalBottomSheet(
@@ -108,13 +107,13 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
         builder: ((_) {
           return GestureDetector(
             child: Inputs(
-                clearElements: clearListElement,
-                priceController: priceController,
-                setCurrnacy: setCurrnacy,
-                addElement: addElement,
-                setDate: setDate,
-                setPrice: setPrice,
-                setTitle: setTitle),
+              priceController: priceController,
+              titleController: titleController,
+              pickDate: pickDate,
+              clearEntries: clearInputs,
+              addElement: addElement,
+              date: dateInput,
+            ),
           );
         }));
   }
@@ -209,7 +208,10 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
                         Charts(_recentTransactions),
 
                         ///the transactions card
-                        UserTransactions(txs: txs)
+                        UserTransactions(
+                          txs: txs,
+                          deleteTransaction: deleteTransaction,
+                        )
                       ]);
                 },
                 itemCount: 1,

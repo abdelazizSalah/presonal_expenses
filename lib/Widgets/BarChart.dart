@@ -18,7 +18,7 @@ class BarChart extends StatelessWidget {
       children: [
         FittedBox(
             child: Text(
-          "\$${price}",
+          "\$${price.toStringAsFixed(0)}",
           style: TextStyle(
               fontFamily: 'OpenSans',
               fontSize: 16.5,

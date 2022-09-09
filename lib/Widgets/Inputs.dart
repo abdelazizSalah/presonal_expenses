@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Inputs extends StatelessWidget {
-  final setTitle;
-  final setDate;
-  final setPrice;
-  final setCurrnacy;
-  final addElement;
-  final clearElements;
   final priceController;
+  final titleController;
+  final addElement;
+  final clearEntries;
+  final pickDate;
+  final date;
   Inputs({
     required this.priceController,
-    required this.setCurrnacy,
-    required this.clearElements,
+    required this.titleController,
+    required this.pickDate,
+    required this.date,
+    required this.clearEntries,
     required this.addElement,
-    required this.setDate,
-    required this.setPrice,
-    required this.setTitle,
   });
   void addOnSubmit(String s) {
     addElement();
@@ -30,10 +29,9 @@ class Inputs extends StatelessWidget {
         child: Column(children: [
           TextField(
               decoration: InputDecoration(labelText: "Title"),
-              onChanged: setTitle,
+              controller: titleController,
               // this means that we take some parameters which we don't use
               onSubmitted: addOnSubmit),
-
           TextField(
               keyboardType: TextInputType.number,
               controller: priceController,
@@ -41,17 +39,14 @@ class Inputs extends StatelessWidget {
 
               /// we can use this way or the (_) {addElement();} way
               onSubmitted: addOnSubmit),
-          TextField(
-              // this type is to make the input is only number
-              decoration: InputDecoration(labelText: "currancy"),
-              onChanged: setCurrnacy,
-              onSubmitted: (_) {
-                addElement();
-              }),
-          // TextField(
-          //   decoration: InputDecoration(labelText: "Date"),
-          //   onChanged: setDate,
-          // ),
+          Row(
+            children: [
+              Text(date == DateTime(2022)
+                  ? "No Date Picked Yet"
+                  : DateFormat.yMMMd().format(date)),
+              TextButton(onPressed: pickDate, child: Text("Pick a Date"))
+            ],
+          ),
           Container(
             margin: EdgeInsets.only(top: 10),
             child: Row(
@@ -70,7 +65,7 @@ class Inputs extends StatelessWidget {
                 Container(
                     width: 100,
                     child: ElevatedButton(
-                        onPressed: clearElements,
+                        onPressed: clearEntries,
                         child: Text("Clear",
                             style: TextStyle(fontSize: 18, shadows: [
                               Shadow(blurRadius: 100, color: Colors.white)
