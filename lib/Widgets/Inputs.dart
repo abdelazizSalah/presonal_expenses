@@ -1,7 +1,15 @@
+/**
+ * utility widget used to allow the user to insert new transaction by providing 
+ * some textfields and buttons
+ * 
+ * @author Abdelaziz Salah
+ * 
+ */
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Inputs extends StatelessWidget {
+  /// utility variables
   final priceController;
   final titleController;
   final addElement;
@@ -16,6 +24,9 @@ class Inputs extends StatelessWidget {
     required this.clearEntries,
     required this.addElement,
   });
+
+  /// utility function to be able to call add element
+  /// using the anonymous function
   void addOnSubmit(String s) {
     addElement();
   }
@@ -24,6 +35,7 @@ class Inputs extends StatelessWidget {
   Widget build(BuildContext context) {
     /// the textFields card
     return Card(
+      /// to give some spacing so i used padding
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(children: [

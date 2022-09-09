@@ -1,3 +1,9 @@
+/**
+ * Widget used to create a bar chart and to show the total amonut spent on 
+ * each different day
+ * 
+ * @author Abdelaziz Salah 
+ */
 import 'package:flutter/material.dart';
 
 class BarChart extends StatelessWidget {
@@ -16,8 +22,10 @@ class BarChart extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        /// fitted box to force the content in the available space
         FittedBox(
             child: Text(
+          /// rounding the cents up
           "\$${price.toStringAsFixed(0)}",
           style: TextStyle(
               fontFamily: 'OpenSans',
@@ -28,6 +36,8 @@ class BarChart extends StatelessWidget {
         Container(
           height: 80,
           width: 15,
+
+          /// stack to create the barchart
           child: Stack(children: [
             Container(
               decoration: BoxDecoration(
@@ -35,9 +45,13 @@ class BarChart extends StatelessWidget {
                       color: Theme.of(context).primaryColorDark, width: 2.0),
                   borderRadius: BorderRadius.circular(10)),
             ),
+
+            /// used only for spacing
             SizedBox(
               height: 4,
             ),
+
+            /// used to make the content relative to the parent
             FractionallySizedBox(
               heightFactor: percentageOfTotalSpending,
               child: Container(

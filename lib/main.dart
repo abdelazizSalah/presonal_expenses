@@ -4,30 +4,39 @@ import './Widgets/Chart.dart';
 import './Widgets/Inputs.dart';
 import './Widgets/userTransactions.dart';
 
+/// the main function which is the entry point to our program
 void main() {
   runApp(MainPage());
 }
 
+/// Mainpage wigdet which contains the root of the application -> material app
 class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      /// theme for the whole program
       theme: ThemeData(
           primaryColorDark: Color.fromARGB(255, 72, 122, 148),
+
+          /// the primary color with all its accent values
           splashColor: Colors.blueGrey,
-          fontFamily: ' '),
+          fontFamily: 'OpenSans'),
       home: PersonalExpanses(),
+
+      /// to remove the debug banner
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
+/// the root widget for the stateful widgets
 class PersonalExpanses extends StatefulWidget {
   @override
   State<PersonalExpanses> createState() => _PersonalExpansesState();
 }
 
 class _PersonalExpansesState extends State<PersonalExpanses> {
+  /// our list of transactions
   List<Transaction> txs = [
     Transaction("PlayStation5", "\$", 200, DateTime.now()),
     Transaction("I Pad", "\$", 421.43, DateTime.now()),
@@ -36,13 +45,12 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
     Transaction("Ice watch", "\$", 421.43, DateTime.now()),
   ];
 
-  String titleInput = "";
-  String currancyInput = "";
-  double priceInput = 0.0;
+  /// utility variables used to get the data from the user
   DateTime dateInput = DateTime(2022);
   TextEditingController priceController = TextEditingController();
   TextEditingController titleController = TextEditingController();
 
+  /// utility function used to add new transaction to the user list
   void addElement() {
     // input validations
     if (titleController.text == "" ||
@@ -54,25 +62,34 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
 
     Transaction tx = Transaction(titleController.text, "\$",
         double.parse(priceController.text), dateInput);
+
+    /// function which is used to render the build widget to show the changes
     setState(() {
       txs.add(tx);
     });
+
+    /// clear the input fields to be used in the new transactions
     clearInputs();
+
+    /// poping down the model bottom sheet
     Navigator.of(context).pop();
   }
 
+  /// utility function used to delete certain transaction
   void deleteTransaction(Transaction tx) {
     setState(() {
       txs.remove(tx);
     });
   }
 
+  /// utility function used to clear the whole transactions
   void clearListElement() {
     setState(() {
       txs.clear();
     });
   }
 
+  /// utility function used to clear the inputs when the user add new transaction
   void clearInputs() {
     Navigator.of(context).pop();
     setState(() {
@@ -83,6 +100,8 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
     _showEntryWidget(context);
   }
 
+  /// utility function used to show the date picker to allow the user choose
+  /// new date for his items
   void pickDate() {
     showDatePicker(
             context: context,
@@ -90,6 +109,7 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
             firstDate: DateTime(2022),
             lastDate: DateTime.now())
         .then((date) {
+      /// if the  user pressed cancel
       if (date == null) return;
       Navigator.of(context).pop();
       _showEntryWidget(context);
@@ -97,8 +117,15 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
     });
   }
 
+  ///utility function used to show the inputs for the user when he press
+  ///on the floating adding button
   void _showEntryWidget(BuildContext ctx) {
+    ///built in function in flutter used to show a sheet from the bottom
+    ///we insert in it our needed widgets which here is inputs widget
     showModalBottomSheet(
+
+        /// usually the conent text of the main widget -> we can use the global
+        /// context instead but i have used ctx here for learning diffrent methods
         context: ctx,
 
         /// this builder should takes context as a parameter for it but i won't
@@ -122,29 +149,32 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
   /// happend in the last week only
   List<Transaction> get _recentTransactions {
     var newTxs = txs.where((tx) {
-      /// bgeb el w2t delw2ty w atr7 meno duration bl days w el duration
-      /// de hya 7 ayam 34an a8ty el esbo3 kolo
+      /// get the date now and subtracting 7 days from them to cover one week
       return tx.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
     }).toList();
-    // txs = newTxs;
 
     /// to always remove the old transactions
     return newTxs;
   }
 
+  /// the build main function for this widget
   @override
   Widget build(BuildContext context) {
-    // print(_recentTransactions);
     return Scaffold(
+      /// button floating to allow the user to add new transaction
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
           _showEntryWidget(context);
         },
       ),
+
+      ///setting its location
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         actions: [
+          /// icon button in the appbar to allow the user to clear all the
+          /// transactions on one click
           IconButton(
             onPressed: clearListElement,
             icon: Icon(
@@ -167,6 +197,9 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
           ),
         ),
       ),
+
+      /// if the body is empty we show No Transaction view else we show the
+      /// transactions list and the chart
       body: txs.isEmpty
           ? Container(
               color: Color.fromARGB(255, 202, 202, 202),

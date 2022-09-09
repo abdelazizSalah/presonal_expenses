@@ -1,3 +1,9 @@
+/**
+ * widget used to show the user 
+ * transactions and to make it scrollable 
+ * 
+ * @author Abdelaziz Salah
+ */
 import 'package:flutter/material.dart';
 import '../Models/Transaction.dart';
 import 'package:intl/intl.dart';

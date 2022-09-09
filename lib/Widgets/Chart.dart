@@ -1,12 +1,18 @@
+/**
+ * utility widget used to create the Chart box .
+ * 
+ * @author Abdelaziz Salah
+ */
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import './/Models/Transaction.dart';
+import '/Models/Transaction.dart';
 import 'BarChart.dart';
 
 class Charts extends StatelessWidget {
   final List<Transaction> txs;
   const Charts(this.txs);
 
+  /// getter function used to prepare the 7 days data
   List<Map<String, Object>> get groupedTransactions {
     return List.generate(7, (index) {
       /// the weekDay should be modified every index iteration
@@ -30,9 +36,12 @@ class Charts extends StatelessWidget {
     }).reversed.toList();
   }
 
+  /// utility function used to get the total
+  /// amount spent through out the whole week
   double get getTotalAmount {
     double total = 0.0;
     for (Map<String, Object> tx in groupedTransactions) {
+      /// casting the object as double
       total += tx['amount'] as double;
     }
 
