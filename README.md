@@ -6,7 +6,6 @@
 * Getting Started 
   * installation
   * Running
-* File Structure
 * ScreenShots
 
 # About
@@ -28,6 +27,10 @@
    1. Android Studio
    2. Flutter 
    3. Dart  
+4. **Make sure that flutter is working properly**
+   1. > flutter doctor
+5. __Run the Program__
+   1. >flutter run
 
 ## Running 
 * **run the main.dart file**
