@@ -191,84 +191,78 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /// button floating to allow the user to add new transaction
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          _showEntryWidget(context);
-        },
-      ),
 
-      ///setting its location
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      appBar: appBarWidget,
+        /// button floating to allow the user to add new transaction
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            _showEntryWidget(context);
+          },
+        ),
 
-      /// if the body is empty we show No Transaction view else we show the
-      /// transactions list and the chart
-      body: txs.isEmpty
-          ? Container(
-              width: MediaQuery.of(context).size.width,
-              color: Color.fromARGB(255, 202, 202, 202),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    "No transactions yet :(",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 28,
-                        shadows: [
-                          Shadow(blurRadius: 100, color: Colors.white)
-                        ]),
-                  ),
-                  Container(
-                    height: 600,
-                    width: 400,
-                    child: Image.asset(
-                      "assets/imgs/waiting.png",
-                      fit: BoxFit.scaleDown,
+        ///setting its location
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        appBar: appBarWidget,
+
+        /// if the body is empty we show No Transaction view else we show the
+        /// transactions list and the chart
+        body: txs.isEmpty
+            ? Container(
+                width: MediaQuery.of(context).size.width,
+                color: Color.fromARGB(255, 202, 202, 202),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "No transactions yet :(",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 28,
+                          shadows: [
+                            Shadow(blurRadius: 100, color: Colors.white)
+                          ]),
                     ),
-                  ),
-                ],
-              ),
-            )
-          : Container(
-              // height: 700,
-              width: 400,
-              // color: Colors.blueGrey,
-              color: Theme.of(context).splashColor,
-              // in order to avoid the overflow make the main page as listview
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        /// the chart card
-                        Container(
-                            height: (MediaQuery.of(context).size.height -
-                                    appBarWidget.preferredSize.height -
-                                    MediaQuery.of(context).padding.top -
-                                    MediaQuery.of(context).viewPadding.top) *
-                                0.2,
-                            child: Charts(_recentTransactions)),
-
-                        ///the transactions card
-                        Container(
+                    Container(
+                      height: 600,
+                      width: 400,
+                      child: Image.asset(
+                        "assets/imgs/waiting.png",
+                        fit: BoxFit.scaleDown,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : Container(
+                // height: 700,
+                width: MediaQuery.of(context).size.width,
+                // color: Colors.blueGrey,
+                color: Theme.of(context).splashColor,
+                // in order to avoid the overflow make the main page as listview
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      /// the chart card
+                      Container(
                           height: (MediaQuery.of(context).size.height -
                                   appBarWidget.preferredSize.height -
                                   MediaQuery.of(context).padding.top -
                                   MediaQuery.of(context).viewPadding.top) *
-                              0.8,
-                          child: UserTransactions(
-                            txs: txs,
-                            deleteTransaction: deleteTransaction,
-                          ),
-                        )
-                      ]);
-                },
-                itemCount: 1,
-              ),
-            ),
-    );
+                              0.27,
+                          child: Charts(_recentTransactions)),
+
+                      ///the transactions card
+                      Container(
+                        height: (MediaQuery.of(context).size.height -
+                                appBarWidget.preferredSize.height -
+                                MediaQuery.of(context).padding.top -
+                                MediaQuery.of(context).viewPadding.top) *
+                            0.7,
+                        child: UserTransactions(
+                          txs: txs,
+                          deleteTransaction: deleteTransaction,
+                        ),
+                      )
+                    ])));
   }
 }
