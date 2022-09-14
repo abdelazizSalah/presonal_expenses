@@ -20,7 +20,7 @@ class UserTransactions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 555,
+      // height: MediaQuery.of(context).size.height * 0.57,
       child: ListView.builder(
         itemBuilder: (context, index) {
           return Card(

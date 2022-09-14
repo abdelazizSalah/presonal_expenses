@@ -51,8 +51,8 @@ class Charts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 140,
-      width: 400,
+      // height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width * 1,
       child: Flexible(
         child: Card(
             color: Colors.white70,

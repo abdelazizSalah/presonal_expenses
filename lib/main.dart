@@ -16,6 +16,9 @@ class MainPage extends StatelessWidget {
     return MaterialApp(
       /// theme for the whole program
       theme: ThemeData(
+          textTheme: TextTheme(
+              titleLarge: TextStyle(
+                  fontSize: 20 * MediaQuery.textScaleFactorOf(context))),
           primaryColorDark: Color.fromARGB(255, 72, 122, 148),
 
           /// the primary color with all its accent values
@@ -157,7 +160,34 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
     return newTxs;
   }
 
-  /// the build main function for this widget
+  /// I have extracted  the appBar to be able to access
+  ///  its properties as height and width and so on
+  final appBarWidget = AppBar(
+    actions: [
+      /// icon button in the appbar to allow the user to clear all the
+      /// transactions on one click
+      // IconButton(
+      //   onPressed: clearListElement,
+      //   icon: Icon(
+      //     Icons.cleaning_services,
+      //     semanticLabel: "Clear all transactions",
+      //   ),
+      // )
+    ],
+    centerTitle: true,
+    title: Text(
+      "Personal Expanses",
+      style: TextStyle(
+        fontFamily: 'Quicksand',
+        shadows: [
+          Shadow(blurRadius: 60, color: Colors.white, offset: Offset(10, 10))
+        ],
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,37 +201,13 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
 
       ///setting its location
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      appBar: AppBar(
-        actions: [
-          /// icon button in the appbar to allow the user to clear all the
-          /// transactions on one click
-          IconButton(
-            onPressed: clearListElement,
-            icon: Icon(
-              Icons.cleaning_services,
-              semanticLabel: "Clear all transactions",
-            ),
-          )
-        ],
-        centerTitle: true,
-        title: Text(
-          "Personal Expanses",
-          style: TextStyle(
-            fontFamily: 'Quicksand',
-            shadows: [
-              Shadow(
-                  blurRadius: 60, color: Colors.white, offset: Offset(10, 10))
-            ],
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      appBar: appBarWidget,
 
       /// if the body is empty we show No Transaction view else we show the
       /// transactions list and the chart
       body: txs.isEmpty
           ? Container(
+              width: MediaQuery.of(context).size.width,
               color: Color.fromARGB(255, 202, 202, 202),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -227,7 +233,7 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
               ),
             )
           : Container(
-              height: 700,
+              // height: 700,
               width: 400,
               // color: Colors.blueGrey,
               color: Theme.of(context).splashColor,
@@ -238,12 +244,25 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         /// the chart card
-                        Charts(_recentTransactions),
+                        Container(
+                            height: (MediaQuery.of(context).size.height -
+                                    appBarWidget.preferredSize.height -
+                                    MediaQuery.of(context).padding.top -
+                                    MediaQuery.of(context).viewPadding.top) *
+                                0.2,
+                            child: Charts(_recentTransactions)),
 
                         ///the transactions card
-                        UserTransactions(
-                          txs: txs,
-                          deleteTransaction: deleteTransaction,
+                        Container(
+                          height: (MediaQuery.of(context).size.height -
+                                  appBarWidget.preferredSize.height -
+                                  MediaQuery.of(context).padding.top -
+                                  MediaQuery.of(context).viewPadding.top) *
+                              0.8,
+                          child: UserTransactions(
+                            txs: txs,
+                            deleteTransaction: deleteTransaction,
+                          ),
                         )
                       ]);
                 },
