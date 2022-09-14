@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import './Models/Transaction.dart';
 import './Widgets/Chart.dart';
 import './Widgets/Inputs.dart';
@@ -6,6 +7,17 @@ import './Widgets/userTransactions.dart';
 
 /// the main function which is the entry point to our program
 void main() {
+  ///// this function waits till initializing every
+  // /// thing before starting the application
+  // WidgetsFlutterBinding.ensureInitialized();
+
+  // /// This function sets only allowed positions for the device
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeRight,
+    DeviceOrientation.landscapeRight
+  ]);
   runApp(MainPage());
 }
 
@@ -17,6 +29,11 @@ class MainPage extends StatelessWidget {
       /// theme for the whole program
       theme: ThemeData(
           textTheme: TextTheme(
+              bodyMedium: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
               titleLarge: TextStyle(
                   fontSize: 20 * MediaQuery.textScaleFactorOf(context))),
           primaryColorDark: Color.fromARGB(255, 72, 122, 148),
@@ -188,6 +205,7 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
     ),
   );
 
+  bool _ShowTransactions = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -210,59 +228,98 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
             ? Container(
                 width: MediaQuery.of(context).size.width,
                 color: Color.fromARGB(255, 202, 202, 202),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      "No transactions yet :(",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 28,
-                          shadows: [
-                            Shadow(blurRadius: 100, color: Colors.white)
-                          ]),
-                    ),
-                    Container(
-                      height: 600,
-                      width: 400,
-                      child: Image.asset(
-                        "assets/imgs/waiting.png",
-                        fit: BoxFit.scaleDown,
+                child: LayoutBuilder(builder: (ctx, constrains) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "No transactions yet :(",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 28,
+                            shadows: [
+                              Shadow(blurRadius: 100, color: Colors.white)
+                            ]),
                       ),
-                    ),
-                  ],
-                ),
+                      Container(
+                        height: constrains.maxHeight * 0.7,
+                        width: 400,
+                        child: Image.asset(
+                          "assets/imgs/waiting.png",
+                          fit: BoxFit.scaleDown,
+                        ),
+                      ),
+                    ],
+                  );
+                }),
               )
             : Container(
-                // height: 700,
-                width: MediaQuery.of(context).size.width,
+                height: 700,
+                width: 600,
+                // height: MediaQuery.of(context).size.height,
+                // width: MediaQuery.of(context).size.width,
                 // color: Colors.blueGrey,
                 color: Theme.of(context).splashColor,
                 // in order to avoid the overflow make the main page as listview
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      /// the chart card
-                      Container(
-                          height: (MediaQuery.of(context).size.height -
-                                  appBarWidget.preferredSize.height -
-                                  MediaQuery.of(context).padding.top -
-                                  MediaQuery.of(context).viewPadding.top) *
-                              0.27,
-                          child: Charts(_recentTransactions)),
-
-                      ///the transactions card
-                      Container(
-                        height: (MediaQuery.of(context).size.height -
-                                appBarWidget.preferredSize.height -
-                                MediaQuery.of(context).padding.top -
-                                MediaQuery.of(context).viewPadding.top) *
-                            0.7,
-                        child: UserTransactions(
-                          txs: txs,
-                          deleteTransaction: deleteTransaction,
+                child: Container(
+                  // margin: EdgeInsets.only(top: 20),
+                  child: ListView(
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Show Chart",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            Switch(
+                                value: _ShowTransactions,
+                                onChanged:
+                                    (boolThatIndicatesThatTheSwitchIsOnOrOff) {
+                                  setState(() {
+                                    _ShowTransactions =
+                                        boolThatIndicatesThatTheSwitchIsOnOrOff;
+                                  });
+                                })
+                          ],
                         ),
-                      )
-                    ])));
+
+                        /// the chart card
+                        _ShowTransactions
+                            ? Container(
+                                height: (MediaQuery.of(context).size.height -
+                                        appBarWidget.preferredSize.height -
+                                        MediaQuery.of(context).padding.top -
+                                        MediaQuery.of(context)
+                                            .viewPadding
+                                            .top) *
+                                    0.7,
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                child: Charts(_recentTransactions))
+                            :
+
+                            ///the transactions card
+                            Container(
+                                // height: (MediaQuery.of(context).size.height -
+                                //         appBarWidget.preferredSize.height -
+                                //         MediaQuery.of(context).padding.top -
+                                //         MediaQuery.of(context)
+                                //             .viewPadding
+                                //             .top) *
+                                //     0.6,
+                                // height: 300,
+                                // height: constrains.maxHeight * 0.5,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.75,
+                                child: LayoutBuilder(builder: (ctx, cstrns) {
+                                  return UserTransactions(
+                                    txs: txs,
+                                    deleteTransaction: deleteTransaction,
+                                  );
+                                }),
+                              )
+                      ]),
+                )));
   }
 }

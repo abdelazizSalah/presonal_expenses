@@ -43,11 +43,7 @@ class UserTransactions extends StatelessWidget {
                               txs[index].currancy +
                                   ' ' +
                                   txs[index].price.toStringAsFixed(2),
-                              style: TextStyle(
-                                  fontFamily: 'OpenSans',
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                           ),
                         ),
