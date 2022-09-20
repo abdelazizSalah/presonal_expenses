@@ -9,14 +9,14 @@ import './Widgets/userTransactions.dart';
 void main() {
   ///// this function waits till initializing every
   // /// thing before starting the application
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
   // /// This function sets only allowed positions for the device
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
     DeviceOrientation.landscapeRight,
-    DeviceOrientation.landscapeRight
+    DeviceOrientation.landscapeLeft
   ]);
   runApp(MainPage());
 }
@@ -142,7 +142,23 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
   void _showEntryWidget(BuildContext ctx) {
     ///built in function in flutter used to show a sheet from the bottom
     ///we insert in it our needed widgets which here is inputs widget
+
+    final keyBoardIsOpened = MediaQuery.of(ctx).viewInsets.bottom;
+    final mediaQuery = MediaQuery.of(context);
     showModalBottomSheet(
+
+        ///
+        isScrollControlled: true,
+
+        /// setting the constrains for the dialog box
+        constraints: BoxConstraints(
+          maxHeight: mediaQuery.size.height *
+              (mediaQuery.orientation == Orientation.landscape
+                  ? (keyBoardIsOpened == 0 ? 0.72 : 1)
+                  : 0.5),
+          maxWidth: mediaQuery.size.width *
+              (mediaQuery.orientation == Orientation.landscape ? 0.9 : 1),
+        ),
 
         /// usually the conent text of the main widget -> we can use the global
         /// context instead but i have used ctx here for learning diffrent methods
@@ -152,14 +168,17 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
         /// use it now so we can just accept _ which means that we don't care
         /// about the thing that this function takes
         builder: ((_) {
-          return GestureDetector(
-            child: Inputs(
-              priceController: priceController,
-              titleController: titleController,
-              pickDate: pickDate,
-              clearEntries: clearInputs,
-              addElement: addElement,
-              date: dateInput,
+          return Container(
+            height: mediaQuery.size.height,
+            child: GestureDetector(
+              child: Inputs(
+                priceController: priceController,
+                titleController: titleController,
+                pickDate: pickDate,
+                clearEntries: clearInputs,
+                addElement: addElement,
+                date: dateInput,
+              ),
             ),
           );
         }));
@@ -181,8 +200,8 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
   ///  its properties as height and width and so on
   final appBarWidget = AppBar(
     actions: [
-      /// icon button in the appbar to allow the user to clear all the
-      /// transactions on one click
+      // / icon button in the appbar to allow the user to clear all the
+      // / transactions on one click
       // IconButton(
       //   onPressed: clearListElement,
       //   icon: Icon(
@@ -208,10 +227,66 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
   bool _ShowTransactions = false;
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final devHeight = mediaQuery.size.height;
+    final devWidth = mediaQuery.size.width;
+    final isPortrait = mediaQuery.orientation == Orientation.portrait;
+
+    final showBoth = Column(
+      children: [
+        Container(
+            height: (devHeight -
+                    appBarWidget.preferredSize.height -
+                    mediaQuery.padding.top -
+                    mediaQuery.viewPadding.top) *
+                (0.3),
+            width: devWidth,
+            child: Charts(_recentTransactions))
+
+        ///the transactions card
+        ,
+        Container(
+          height: devHeight * 0.75,
+          child: LayoutBuilder(builder: (ctx, cstrns) {
+            return UserTransactions(
+              txs: txs,
+              deleteTransaction: deleteTransaction,
+            );
+          }),
+        )
+      ],
+    );
+
+    final ShowOnlyOne = Column(
+      children: [
+        _ShowTransactions
+            ? Container(
+                height: (devHeight -
+                        appBarWidget.preferredSize.height -
+                        mediaQuery.padding.top -
+                        mediaQuery.viewPadding.top) *
+                    (0.7),
+                width: devWidth * 0.9,
+                child: Charts(_recentTransactions))
+            :
+
+            ///the transactions card
+            Container(
+                height: devHeight * 0.75,
+                child: LayoutBuilder(builder: (ctx, cstrns) {
+                  return UserTransactions(
+                    txs: txs,
+                    deleteTransaction: deleteTransaction,
+                  );
+                }),
+              )
+      ],
+    );
     return Scaffold(
 
         /// button floating to allow the user to add new transaction
         floatingActionButton: FloatingActionButton(
+          mini: !isPortrait,
           child: Icon(Icons.add),
           onPressed: () {
             _showEntryWidget(context);
@@ -219,107 +294,74 @@ class _PersonalExpansesState extends State<PersonalExpanses> {
         ),
 
         ///setting its location
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterFloat,
         appBar: appBarWidget,
 
         /// if the body is empty we show No Transaction view else we show the
         /// transactions list and the chart
         body: txs.isEmpty
             ? Container(
-                width: MediaQuery.of(context).size.width,
+                height: devHeight,
+                width: devWidth,
                 color: Color.fromARGB(255, 202, 202, 202),
                 child: LayoutBuilder(builder: (ctx, constrains) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        "No transactions yet :(",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 28,
-                            shadows: [
-                              Shadow(blurRadius: 100, color: Colors.white)
-                            ]),
-                      ),
-                      Container(
-                        height: constrains.maxHeight * 0.7,
-                        width: 400,
-                        child: Image.asset(
-                          "assets/imgs/waiting.png",
-                          fit: BoxFit.scaleDown,
+                  return SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          "No transactions yet :(",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 28,
+                              shadows: [
+                                Shadow(blurRadius: 100, color: Colors.white)
+                              ]),
                         ),
-                      ),
-                    ],
+                        Container(
+                          height: constrains.maxHeight * 0.7,
+                          width: 400,
+                          child: Image.asset(
+                            "assets/imgs/waiting.png",
+                            fit: BoxFit.scaleDown,
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 }),
               )
             : Container(
-                height: 700,
-                width: 600,
-                // height: MediaQuery.of(context).size.height,
-                // width: MediaQuery.of(context).size.width,
+                height: devHeight,
+                width: devWidth,
                 // color: Colors.blueGrey,
                 color: Theme.of(context).splashColor,
                 // in order to avoid the overflow make the main page as listview
                 child: Container(
-                  // margin: EdgeInsets.only(top: 20),
-                  child: ListView(
-                      // mainAxisAlignment: MainAxisAlignment.start,
+                  child: ListView(children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Show Chart",
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                            Switch(
-                                value: _ShowTransactions,
-                                onChanged:
-                                    (boolThatIndicatesThatTheSwitchIsOnOrOff) {
-                                  setState(() {
-                                    _ShowTransactions =
-                                        boolThatIndicatesThatTheSwitchIsOnOrOff;
-                                  });
-                                })
-                          ],
+                        Text(
+                          "Show Chart",
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
+                        Switch(
+                            value: _ShowTransactions,
+                            onChanged:
+                                (boolThatIndicatesThatTheSwitchIsOnOrOff) {
+                              setState(() {
+                                _ShowTransactions =
+                                    boolThatIndicatesThatTheSwitchIsOnOrOff;
+                              });
+                            })
+                      ],
+                    ),
 
-                        /// the chart card
-                        _ShowTransactions
-                            ? Container(
-                                height: (MediaQuery.of(context).size.height -
-                                        appBarWidget.preferredSize.height -
-                                        MediaQuery.of(context).padding.top -
-                                        MediaQuery.of(context)
-                                            .viewPadding
-                                            .top) *
-                                    0.7,
-                                width: MediaQuery.of(context).size.width * 0.8,
-                                child: Charts(_recentTransactions))
-                            :
-
-                            ///the transactions card
-                            Container(
-                                // height: (MediaQuery.of(context).size.height -
-                                //         appBarWidget.preferredSize.height -
-                                //         MediaQuery.of(context).padding.top -
-                                //         MediaQuery.of(context)
-                                //             .viewPadding
-                                //             .top) *
-                                //     0.6,
-                                // height: 300,
-                                // height: constrains.maxHeight * 0.5,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.75,
-                                child: LayoutBuilder(builder: (ctx, cstrns) {
-                                  return UserTransactions(
-                                    txs: txs,
-                                    deleteTransaction: deleteTransaction,
-                                  );
-                                }),
-                              )
-                      ]),
+                    /// the chart card
+                    isPortrait == true ? showBoth : ShowOnlyOne
+                  ]),
                 )));
   }
 }

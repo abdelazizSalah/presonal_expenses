@@ -5,7 +5,10 @@
  * @author Abdelaziz Salah
  * 
  */
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class Inputs extends StatelessWidget {
@@ -33,59 +36,86 @@ class Inputs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// the textFields card
-    return Card(
-      /// to give some spacing so i used padding
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(children: [
-          TextField(
-              decoration: InputDecoration(labelText: "Title"),
-              controller: titleController,
-              // this means that we take some parameters which we don't use
-              onSubmitted: addOnSubmit),
-          TextField(
-              keyboardType: TextInputType.number,
-              controller: priceController,
-              decoration: InputDecoration(labelText: "Price"),
+    final mediaQuery = MediaQuery.of(context);
+    final devWidth = mediaQuery.size.width;
+    final devHeight = mediaQuery.size.height;
+    final isPortrait = mediaQuery.orientation == Orientation.portrait;
 
-              /// we can use this way or the (_) {addElement();} way
-              onSubmitted: addOnSubmit),
-          Row(
-            children: [
-              Text(date == DateTime(2022)
-                  ? "No Date Picked Yet"
-                  : DateFormat.yMMMd().format(date)),
-              TextButton(onPressed: pickDate, child: Text("Pick a Date"))
-            ],
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            child: Row(
+    /// the textFields card
+    return SingleChildScrollView(
+      child: Card(
+        /// to give some spacing so i used padding
+        child: Container(
+          padding: EdgeInsets.only(
+              top: 8,
+              left: 8,
+              right: 8,
+              bottom: mediaQuery.viewInsets.bottom + 10),
+          child: Column(children: [
+            TextField(
+                decoration: InputDecoration(labelText: "Title"),
+                controller: titleController,
+                // this means that we take some parameters which we don't use
+                onSubmitted: addOnSubmit),
+            TextField(
+                keyboardType: TextInputType.number,
+                controller: priceController,
+                decoration: InputDecoration(labelText: "Price"),
+
+                /// we can use this way or the (_) {addElement();} way
+
+                onSubmitted: addOnSubmit),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  width: 100,
-                  child: ElevatedButton(
-                    onPressed: addElement,
-                    child: Text("Add",
-                        style: TextStyle(fontSize: 18, shadows: [
-                          Shadow(blurRadius: 100, color: Colors.white)
-                        ])),
-                  ),
+                Text(
+                  date == DateTime(2022)
+                      ? "No Date Picked Yet"
+                      : DateFormat.yMMMd().format(date),
+                  style: TextStyle(color: Theme.of(context).splashColor),
                 ),
-                Container(
-                    width: 100,
-                    child: ElevatedButton(
-                        onPressed: clearEntries,
-                        child: Text("Clear",
-                            style: TextStyle(fontSize: 18, shadows: [
-                              Shadow(blurRadius: 100, color: Colors.white)
-                            ]))))
+                TextButton(
+                    onPressed: pickDate,
+                    child: Text("Pick a Date",
+                        style: TextStyle(
+                            color: Theme.of(context).accentColor,
+                            fontSize: 18))),
               ],
             ),
-          ),
-        ]),
+            Container(
+              margin: EdgeInsets.only(top: isPortrait == true ? 30 : 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    /// Button Container
+                    width: devWidth * 0.25,
+                    child: ElevatedButton(
+                      onPressed: addElement,
+                      child: Text("Add",
+                          style: TextStyle(fontSize: 18, shadows: [
+                            Shadow(blurRadius: 100, color: Colors.white)
+                          ])),
+                    ),
+                  ),
+                  Container(
+
+                      /// The Second Button Container
+                      width: devWidth * 0.25,
+                      child: ElevatedButton(
+                          onPressed: clearEntries,
+                          child: Text("Clear",
+                              style: TextStyle(fontSize: 18, shadows: [
+                                Shadow(blurRadius: 100, color: Colors.white)
+                              ]))))
+                ],
+              ),
+            ),
+          ]),
+        ),
       ),
     );
   }
